@@ -1,61 +1,50 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteNote } from '../../lib/api';
-import type { Note } from '../../types/note.ts';
-import css from './NoteList.module.css';
-import toast from 'react-hot-toast';
-import Link from 'next/link';
+"use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteNote } from "@/lib/api/clientApi";
+import Link from "next/link";
+import { Note } from "@/types/note";
+import toast, { Toaster } from "react-hot-toast";
+import css from "./NoteList.module.css";
 
 interface NoteListProps {
-  notes?: Note[];
+  items: Note[];
 }
 
-export default function NoteList({ notes = [] }: NoteListProps) {
+export default function NoteList({ items }: NoteListProps) {
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+
+  const { mutate } = useMutation({
     mutationFn: deleteNote,
-    onSuccess: data => {
-      toast.success(
-        `The note ${data.title} was removed successfully from your notelist`,
-        { duration: 4000 }
-      );
-      queryClient.invalidateQueries({ queryKey: ['noteList'] });
+    onSuccess() {
+      toast.success("Your note has been deleted.");
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
-    onError: () => {
-      toast.error("Something went wrong! I can't delete this note", {
-        duration: 4000,
-      });
-      console.log('Видалити не вийшло');
+    onError() {
+      toast.error("Sorry, something is wrong. Try again.");
     },
   });
 
-  const handleDeleteNote = (id: string) => {
-    mutation.mutate(id);
-  };
   return (
-    <ul className={css.list}>
-      {notes.map(note => {
-        return (
-          <li className={css.listItem} key={note.id}>
-            <h2 className={css.title}>{note.title}</h2>
-            <p className={css.content}>{note.content}</p>
+    <>
+      <ul className={css.list}>
+        {items.map((item) => (
+          <li key={item.id} className={css.listItem}>
+            <h2 className={css.title}>{item.title}</h2>
+            <p className={css.content}>{item.content}</p>
             <div className={css.footer}>
-              <span className={css.tag}>{note.tag}</span>
-              <Link className={css.button} href={`../${note.id}`}>
+              <span className={css.tag}>{item.tag}</span>
+              <Link href={`/notes/${item.id}`} className={css.button} scroll={false}>
                 View details
               </Link>
-
-              <button
-                onClick={() => handleDeleteNote(note.id)}
-                className={css.button}
-              >
+              <button onClick={() => mutate(item.id)} className={css.button}>
                 Delete
               </button>
             </div>
           </li>
-        );
-      })}
-
-      {/* Набір елементів списку нотаток */}
-    </ul>
+        ))}
+      </ul>
+      <Toaster position="top-right" />
+    </>
   );
 }
