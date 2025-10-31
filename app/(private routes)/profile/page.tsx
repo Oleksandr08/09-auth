@@ -1,24 +1,24 @@
-import Link from 'next/link';
-import css from './ProfilePage.module.css';
-import Image from 'next/image';
-import { Metadata } from 'next';
-import { getServerMe } from '@/lib/api/serverApi';
+import Link from "next/link";
+import css from "./ProfilePage.module.css";
+import Image from "next/image";
+import { Metadata } from "next";
+import { getServerMe } from "@/lib/api/serverApi";
 
 export const metadata: Metadata = {
-  title: 'Profile page',
+  title: "Profile page",
   description:
-    'Notehub app is designed for comfortable note-taking. The Profile page allows to quickly and easily update and view user profile',
+    "Notehub app is designed for comfortable note-taking. The Profile page allows to quickly and easily update and view user profile",
   openGraph: {
-    title: 'Edit profile page',
+    title: "Edit profile page",
     description:
-      'Notehub app is designed for comfortable note-taking. The Profile page allows to quickly and easily update and view user profile',
-    url: 'https://08-zustand-brown-iota.vercel.app/',
+      "Notehub app is designed for comfortable note-taking. The Profile page allows to quickly and easily update and view user profile",
+    url: "https://08-zustand-flame-five.vercel.app/",
     images: [
       {
-        url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+        url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
         width: 1200,
         height: 630,
-        alt: 'Notehub App',
+        alt: "Notehub App",
       },
     ],
   },
